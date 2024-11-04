@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABSENSI MAHASISWA & SISWA</title>
+    <style>
+        #gform {
+            margin: auto;
+            border: blue solid 1px;
+            width: 100%;
+            height: 98vh;
+            overflow: auto;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body style="background-color: #eee">
+    <!-- Container untuk membuat iframe responsif -->
+    <iframe id="gform"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSeI9BB5WHCtQS-_4CsYjqjojoe8sBxQ1z_Dg4sLCCmWnNjjBQ/viewform?embedded=true"
+        style="width: 100%; border: none;"></iframe>
+    <script type="text/javascript">
+        var lat, lon;
+
+        // Fungsi untuk mendapatkan lokasi saat halaman pertama kali dimuat
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                alert("Geolocation tidak didukung oleh browser ini.");
+            }
+        }
+
+        // Fungsi ini akan dipanggil jika koordinat berhasil diperoleh
+        function success(position) {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+        }
+
+        // Fungsi ini akan dipanggil jika ada kesalahan dalam mengambil koordinat
+        function error() {
+            alert("Gagal mendapatkan lokasi. Pastikan izin lokasi sudah diberikan.");
+        }
+
+        // Panggil fungsi getLocation saat halaman dimuat
+        window.onload = getLocation;
+
+        // Pemantauan event submit pada iframe
+        document.getElementById('gform').onload = function () {
+            // Cek apakah lat dan lon sudah terisi,
+            if (lat && lon) {
+                // Redirect ke URL WebApp dengan parameter lokasi
+                document.location = `https://script.google.com/macros/s/AKfycbxKQZrJgedtynDnPVvf-Iqic-H5ZvK5QtJ7dr6H2gro8qTnvu05p4FdaSFhSHGj1N3FSg/exec?lat=${lat}&lon=${lon}`;
+            }
+        };
+    </script>
+</body>
+
+</html>

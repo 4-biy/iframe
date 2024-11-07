@@ -37,41 +37,21 @@
 
 <body style="background-color: #eee">
     <!-- Container untuk membuat iframe responsif -->
-    <iframe id="gform"
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeI9BB5WHCtQS-_4CsYjqjojoe8sBxQ1z_Dg4sLCCmWnNjjBQ/viewform?embedded=true"
-        style="width: 100%; border: none;"></iframe>
+    <!-- <iframe id="gform"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSeweeKDDojgTSN-iKOllKoiaAWpHKDrNMr_xlpJIQJAaL6few/viewform?embedded=true"
+        style="width: 100%; border: none;"></iframe> -->
+        <iframe id="gform"
+            src="https://docs.google.com/forms/d/e/1FAIpQLSeI9BB5WHCtQS-_4CsYjqjojoe8sBxQ1z_Dg4sLCCmWnNjjBQ/viewform?embedded=true"
+            style="width: 100%; border: none;"></iframe>
     <script type="text/javascript">
-        var lat, lon;
-
-        // Fungsi untuk mendapatkan lokasi saat halaman pertama kali dimuat
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, error);
-            } else {
-                alert("Geolocation tidak didukung oleh browser ini.");
-            }
-        }
-
-        // Fungsi ini akan dipanggil jika koordinat berhasil diperoleh
-        function success(position) {
-            lat = position.coords.latitude;
-            lon = position.coords.longitude;
-        }
-
-        // Fungsi ini akan dipanggil jika ada kesalahan dalam mengambil koordinat
-        function error() {
-            alert("Gagal mendapatkan lokasi. Pastikan izin lokasi sudah diberikan.");
-        }
-
-        // Panggil fungsi getLocation saat halaman dimuat
-        window.onload = getLocation;
-
-        // Pemantauan event submit pada iframe
+        var loadCount = 0;
+        // Sesuaikan id gform dengan id iframe di atas
         document.getElementById('gform').onload = function () {
-            // Cek apakah lat dan lon sudah terisi,
-            if (lat && lon) {
-                // Redirect ke URL WebApp dengan parameter lokasi
-                document.location = `https://script.google.com/macros/s/AKfycbxF6HvDeUNET9Jy8b3GTBySnBZgK7FWSElBG_kYHOLIQGm61ouZ7p_1dPD5jWCtyoEd-g/exec?lat=${lat}&lon=${lon}`;
+            loadCount++;
+            // Mengecek apakah iframe sudah dimuat lebih dari sekali
+            if (loadCount > 1) {
+                // Ganti URL di bawah dengan URL WebApp Anda
+                document.location = "https://script.google.com/macros/s/AKfycbxjbtdC6xJM8F1nToowbzi07Bwman2qASmzDFXq1Jd4LE1ip1wB8jEZ_GNTH4B6xukI8g/exec";
             }
         };
     </script>

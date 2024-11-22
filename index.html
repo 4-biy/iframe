@@ -1,48 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ABSENSI MAHASISWA & SISWA</title>
-    <style>
-        #gform {
-            margin: auto;
-            border: blue solid 1px;
-            width: 100%;
-            height: 98vh;
-            overflow: auto;
-        }
-
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-
-        .header {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .header img {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>ABSENSI MAHASISWA & SISWA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://atugatran.github.io/FontAwesome6Pro/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body style="background-color: #eee">
-    <!-- Container untuk membuat iframe responsif -->
-    <!-- <iframe id="gform"
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeweeKDDojgTSN-iKOllKoiaAWpHKDrNMr_xlpJIQJAaL6few/viewform?embedded=true"
-        style="width: 100%; border: none;"></iframe> -->
-        <iframe id="gform"
-            src="https://script.google.com/macros/s/AKfycbyds5eS7PkDsFkZS3XJFpR5y2FitdaPoT-rrn4E6u4M2wgtcWwU1PZuTwkojoaTjmFx-w/exec"
-            style="width: 100%; border: none;"></iframe>
+<body class="bg-slate-100">
+  <div class="flex flex-col items-center min-h-screen mx-auto">
+    <!-- Header Section -->
+    <div class="w-full bg-indigo-300 p-3 md:py-8 flex flex-col items-center">
+      <div class="flex items-center justify-center gap-6 md:gap-12 max-w-screen-xl">
+        <img class="h-16 w-16 md:h-32 md:w-32" src="https://github.com/4-biy/homepage/blob/main/Logoooo.png?raw=true" alt="Logo IKI"/>
+        <div class="text-center">
+          <small class="text-2xl md:text-2xl font-semibold">PT Industri Kapal Indonesia (Persero)</small>
+          <h1 class="hidden md:block text-4xl md:text-4xl font-bold text-center">
+            Catatan Elektronik Mahasiswa Magang dan PKL Aktif dengan Keandalan Analisis
+          </h1>
+        </div>
+        <img class="h-16 w-28  md:h-24 md:w-36"
+                    src="https://github.com/4-biy/homepage/blob/main/BUMN.png?raw=true"
+                    alt="Logo Sulawesi Selatan" />
+      </div>
+    </div>
+
+    <!-- Mobile Header Text -->
+    <div class="flex flex-col items-center py-4 px-6 bg-white shadow-md w-full text-center md:hidden">
+      <h1 class="text-xl font-medium leading-snug">Catatan Elektronik Mahasiswa Magang dan PKL Aktif dengan
+        Keandalan Analisis</h1>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="max-w-screen-md w-full p-6">
+      <!-- Breadcrumb -->
+
+
+      <!-- Menu Aplikasi -->
+      <div id="menuAplikasi">
+        <h3 class="text-2xl md:text-4xl font-bold text-center text-indigo-600 mt-8 mb-6">Menu Aplikasi</h3>
+        <div class="flex flex-wrap justify-center gap-4">
+          <!-- Absensi Button -->
+          <button onclick="showAbsensiMenu()"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Absensi</p>
+                        <i class="fa-solid fa-user-check text-5xl md:text-7xl"></i>
+                    </button>
+
+          <!-- Sertifikat Button -->
+          <button onclick="showSertifikatMenu()"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Sertifikat</p>
+                        <i class="fa-sharp fa-solid fa-file-certificate text-5xl md:text-7xl"></i>
+                    </button>
+        </div>
+      </div>
+
+      <!-- Sertifikat Menu -->
+      <div id="menuAbsensi" class="hidden">
+        <h3 class="text-2xl md:text-4xl font-bold text-center text-indigo-600 mt-8 mb-6">Menu Absensi</h3>
+        <nav id="breadcrumb" aria-label="Breadcrumb" class="mb-6 text-center">
+          <ol class="flex text-sm text-gray-500 justify-center">
+            <li>
+              <a href=""
+                class="text-indigo-600 hover:text-indigo-800">Home</a>
+              <span class="mx-2">/</span>
+
+
+            </li>
+            <li>
+              <span class="text-gray-400">Absensi</span>
+            </li>
+          </ol>
+        </nav>
+        <div class="flex flex-wrap justify-center gap-4">
+          <!-- Mahasiswa Button -->
+          <button onclick="checkLocationAndRedirect()"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Hadir</p>
+                        <i class="fa-sharp fa-solid fa-ballot-check text-5xl md:text-7xl"></i>
+                    </button>
+
+          <!-- Siswa Button -->
+          <button onclick="location.href='https://forms.gle/m5GqFEHuZfDGqx2E7'"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Izin Atau sakit</p>
+                        <i class="fa-sharp fa-solid fa-ballot-check text-5xl md:text-7xl"></i>
+                    </button>
+        </div>
+      </div>
+
+      <!-- Sertifikat Menu -->
+      <div id="menuSertifikat" class="hidden">
+        <h3 class="text-2xl md:text-4xl font-bold text-center text-indigo-600 mt-8 mb-6">Menu Sertifikat</h3>
+        <nav id="breadcrumb" aria-label="Breadcrumb" class="mb-6 text-center">
+          <ol class="flex text-sm text-gray-500 justify-center">
+            <li>
+              <a href="home.html" class="text-indigo-600 hover:text-indigo-800">Home</a>
+              <span class="mx-2">/</span>
+            </li>
+            <li>
+              <span class="text-gray-400">Sertifikat</span>
+            </li>
+          </ol>
+        </nav>
+        <div class="flex flex-wrap justify-center gap-4">
+          <!-- Mahasiswa Button -->
+          <button onclick="location.href='https://forms.gle/7bE8ZvGKVmPcRgmh6'"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Mahasiswa</p>
+                        <i class="fa-solid fa-graduation-cap text-5xl md:text-7xl"></i>
+                    </button>
+
+          <!-- Siswa Button -->
+          <button onclick="location.href='https://forms.gle/jEtVZDo9oZYZEkdp8'"
+                        class="w-40 h-40 md:w-60 md:h-60 flex flex-col justify-center items-center bg-indigo-300 hover:bg-indigo-200 text-indigo-900 rounded-lg shadow-lg hover:scale-105 transform transition">
+                        <p class="text-lg md:text-2xl font-semibold mb-2">Siswa</p>
+                        <i class="fa-solid fa-graduation-cap text-5xl md:text-7xl"></i>
+                    </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Geolocation and Redirect Script -->
+  <script>
+    // Di HTML/JavaScript
+        function checkLocationAndRedirect() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLatitude = position.coords.latitude;
+                    const userLongitude = position.coords.longitude;
+
+                    // Kirimkan data lokasi ke Google Apps Script
+                    google.script.run.withSuccessHandler(function(response){
+                        if (response === "inside") {
+                            window.location.href = "https://script.google.com/macros/s/AKfycbwg5DtDdQFya5xdZ-iKVaBpEKNsHTWL6fwnBdQN7akAoJ9M9keZlc_vQxONIfy8sqXMQg/exec"; // Redirect jika dalam area
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'PERHATIAN',
+                                text: 'Anda berada di luar area yang ditentukan!',
+                            });
+                        }
+                    }).checkLocationInPolygon(userLatitude, userLongitude);
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Geolocation tidak didukung',
+                    text: 'Perangkat Anda tidak mendukung geolocation.',
+                });
+            }
+        }
+
+        function redirectToDoGet() {
+          google.script.run
+            .withSuccessHandler(function(response) {
+              // Tindakan setelah sukses, seperti memperbarui UI atau melakukan redirect
+              window.location.href = response; // Misalnya, URL yang dikembalikan oleh doGet
+            })
+            .withFailureHandler(function(error) {
+              alert("Terjadi kesalahan: " + error.message);
+            })
+            .doGet(); // Memanggil doGet() yang didefinisikan di Google Apps Script
+        }
+
+
+        // Fungsi untuk menampilkan menu Sertifikat dan menyembunyikan menu Aplikasi
+        function showSertifikatMenu() {
+            document.getElementById("menuAplikasi").classList.add("hidden");
+            document.getElementById("menuSertifikat").classList.remove("hidden");
+        }
+
+        function showAbsensiMenu() {
+            document.getElementById("menuAplikasi").classList.add("hidden");
+            document.getElementById("menuAbsensi").classList.remove("hidden");
+        }
+
+        function allowAccessToAbsensi() {
+            canAccessAbsensi = true;
+            window.location.href = "absensi.html"; // Arahkan ke absensi.html
+        }
+  </script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>ABSENSI MAHASISWA & SISWA</title>
     <style>
         #gform {
@@ -37,12 +38,40 @@
 
 <body style="background-color: #eee">
     <!-- Container untuk membuat iframe responsif -->
-    <!-- <iframe id="gform"
-        src="https://docs.google.com/forms/d/e/1FAIpQLSeweeKDDojgTSN-iKOllKoiaAWpHKDrNMr_xlpJIQJAaL6few/viewform?embedded=true"
-        style="width: 100%; border: none;"></iframe> -->
-        <iframe id="gform"
-            src="https://script.google.com/macros/s/AKfycbw8hAt2_hwdKMVAzvJhdo2C9yCDQZw6EsWcAbeVYI8UyxY8PS27YF5CNNNW3LuPSxZzCg/exec"
-            style="width: 100%; border: none;"></iframe>
+    <iframe id="gform" style="width: 100%; border: none;"></iframe>
+  <script>
+        // Cek apakah locationVerified true
+        if (sessionStorage.getItem("locationVerified") !== "true") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Akses Ditolak',
+                text: 'Anda harus berada dalam area yang ditentukan untuk mengakses halaman ini.',
+                confirmButtonText: 'Kembali'
+            }).then(() => {
+                window.location.href = "home.html";
+            });
+        } else {
+            // Mengatur src iframe setelah halaman dimuat
+            var iframe = document.getElementById('gform');
+            iframe.src = "https://script.google.com/macros/s/AKfycbxUGezSQyW94K6rLMJl_HVlrjs_4BCmiUXy0PbdIbQtuCPVPxYrqCdvuJSw0TQp5vpz3Q/exec?lat=${userLatitude}&lng=${userLongitude}";
+            
+            // Deteksi jika iframe gagal dimuat
+            iframe.onload = function() {
+                console.log('Iframe berhasil dimuat');
+            };
+
+            // Fungsi untuk menangani error jika iframe gagal dimuat
+            function handleError() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Not Found',
+                    text: 'Halaman tidak dapat dimuat. Coba lagi nanti.',
+                    confirmButtonText: 'Tutup'
+                });
+            }
+        }
+    </script>
 </body>
+
 
 </html>

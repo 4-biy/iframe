@@ -14,7 +14,7 @@
 <body class="bg-slate-100">
   <!-- Tambahkan elemen iframe di bagian body -->
 <iframe id="absensiIframe" class="hidden w-full h-screen" frameborder="0"></iframe>
-  <div class="flex flex-col items-center min-h-screen mx-auto">
+  <div  id="mainContent" class="flex flex-col items-center min-h-screen mx-auto">
     <!-- Header Section -->
     <div class="w-full bg-indigo-300 p-3 md:py-8 flex flex-col items-center">
       <div class="flex items-center justify-center gap-6 md:gap-12 max-w-screen-xl">
@@ -132,68 +132,63 @@
 
   <!-- Geolocation and Redirect Script -->
 <script>
-    const polygonCoords = [
-        { lat: -5.108244, lng: 119.432153 },
-        { lat: -5.108519, lng: 119.432225 },
-        { lat: -5.108269, lng: 119.432614 },
-        { lat: -5.107989, lng: 119.432442 }
+     const polygonCoords = [
+      { lat: -5.108244, lng: 119.432153 },
+      { lat: -5.108519, lng: 119.432225 },
+      { lat: -5.108269, lng: 119.432614 },
+      { lat: -5.107989, lng: 119.432442 }
     ];
 
     function isPointInPolygon(lat, lng, polygon) {
-        let inside = false;
-        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-            const xi = polygon[i].lat, yi = polygon[i].lng;
-            const xj = polygon[j].lat, yj = polygon[j].lng;
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].lat, yi = polygon[i].lng;
+        const xj = polygon[j].lat, yj = polygon[j].lng;
 
-            const intersect = ((yi > lng) != (yj > lng)) &&
-                (lat < (xj - xi) * (lng - yi) / (yj - yi) + xi);
-            if (intersect) inside = !inside;
-        }
-        return inside;
+        const intersect = ((yi > lng) != (yj > lng)) &&
+          (lat < (xj - xi) * (lng - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
     }
 
     function checkLocationAndRedirect() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const userLatitude = position.coords.latitude;
-                const userLongitude = position.coords.longitude;
-                const isInside = isPointInPolygon(userLatitude, userLongitude, polygonCoords);
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const userLatitude = position.coords.latitude;
+          const userLongitude = position.coords.longitude;
+          const isInside = isPointInPolygon(userLatitude, userLongitude, polygonCoords);
 
-                if (!isInside) {
-                    Swal.fire({
-                        icon: 'error',
-                        iconColor: '#e74c3c',
-                        title: 'PERHATIAN',
-                        html: 'Anda berada di luar area yang ditentukan! Silakan kembali ke lokasi yang benar.<a href="warning.html" style="color:#e74c3c; text-decoration: none; font-size:13px;">Klik di sini untuk informasi lebih lanjut</a>',
-                        confirmButtonText: 'Mengerti',
-                        confirmButtonColor: '#e74c3c'
-                    });
-                } else {
-                    // Set data ke sessionStorage untuk menandai bahwa absensi berhasil
-                    sessionStorage.setItem("locationVerified", "true");
-                    // Tampilkan iframe dengan URL tujuan
-                    showIframe("https://script.google.com/macros/s/AKfycbyJzS91r_339zUjSSNPEExyyTCgicT4Nf7qTSygm1Spn_fn9_1ySTtlAJ9KE9P_6djwVA/exec");
-                }
-            }, function (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal mengambil lokasi',
-                    text: error.message,
-                });
-            });
-        } else {
+          if (!isInside) {
             Swal.fire({
-                icon: 'error',
-                title: 'Geolocation tidak didukung',
-                text: 'Perangkat Anda tidak mendukung geolocation.',
+              icon: 'error',
+              iconColor: '#e74c3c',
+              title: 'PERHATIAN',
+              html: 'Anda berada di luar area yang ditentukan! Silakan kembali ke lokasi yang benar.<a href="warning.html" style="color:#e74c3c; text-decoration: none; font-size:13px;">Klik di sini untuk informasi lebih lanjut</a>',
+              confirmButtonText: 'Mengerti',
+              confirmButtonColor: '#e74c3c'
             });
-        }
-    }
-
-    function showIframe(url) {
-        const iframe = document.getElementById("absensiIframe");
-        iframe.src = url; // Set URL iframe
-        iframe.classList.remove("hidden"); // Tampilkan iframe
+          } else {
+            // Redirect to iframe
+            const iframe = document.getElementById("absensiIframe");
+            iframe.src = "https://script.google.com/macros/s/AKfycbxiPd62VdgGCiazO_SaxnxcbIV9PZHE_wIzBw9wj8ZI0vHIm0mdMT63vKNBQe1lPOximQ/exec";
+            document.getElementById("mainContent").classList.add("hidden");
+            document.getElementById("iframeContainer").classList.remove("hidden");
+          }
+        }, function (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal mengambil lokasi',
+            text: error.message,
+          });
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Geolocation tidak didukung',
+          text: 'Perangkat Anda tidak mendukung geolocation.',
+        });
+      }
     }
 
     function showSertifikatMenu() {

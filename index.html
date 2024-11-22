@@ -130,25 +130,56 @@
 
   <!-- Geolocation and Redirect Script -->
   <script>
-    // Di HTML/JavaScript
+        // Koordinat area poligon
+           const polygonCoords = [
+                { lat: -5.108244, lng: 119.432153 },
+                { lat: -5.108519, lng: 119.432225 },
+                { lat: -5.108269, lng: 119.432614 },
+                { lat: -5.107989, lng: 119.432442 }
+            ];
+
+        // Fungsi untuk memeriksa apakah titik berada di dalam poligon
+        function isPointInPolygon(lat, lng, polygon) {
+            let inside = false;
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const xi = polygon[i].lat, yi = polygon[i].lng;
+                const xj = polygon[j].lat, yj = polygon[j].lng;
+
+                const intersect = ((yi > lng) != (yj > lng)) &&
+                    (lat < (xj - xi) * (lng - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+            return inside;
+        }
+
+        // Fungsi untuk memeriksa lokasi dan mengarahkan
         function checkLocationAndRedirect() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     const userLatitude = position.coords.latitude;
                     const userLongitude = position.coords.longitude;
+                    const isInside = isPointInPolygon(userLatitude, userLongitude, polygonCoords);
 
-                    // Kirimkan data lokasi ke Google Apps Script
-                    google.script.run.withSuccessHandler(function(response){
-                        if (response === "inside") {
-                            window.location.href = "https://script.google.com/macros/s/AKfycbwg5DtDdQFya5xdZ-iKVaBpEKNsHTWL6fwnBdQN7akAoJ9M9keZlc_vQxONIfy8sqXMQg/exec"; // Redirect jika dalam area
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'PERHATIAN',
-                                text: 'Anda berada di luar area yang ditentukan!',
-                            });
-                        }
-                    }).checkLocationInPolygon(userLatitude, userLongitude);
+                    if (!isInside) {
+                        Swal.fire({
+                            icon: 'error',
+                            iconColor: '#e74c3c',
+                            title: 'PERHATIAN',
+                            html: 'Anda berada di luar area yang ditentukan! Silakan kembali ke lokasi yang benar.<a href="warning.html" style="color:#e74c3c; text-decoration: none; font-size:13px;">Klik di sini untuk informasi lebih lanjut</a>',
+                            confirmButtonText: 'Mengerti',
+                            confirmButtonColor: '#e74c3c'
+                        });
+                    } else {
+                        sessionStorage.setItem("locationVerified", "true");
+                        window.location.href = "absensi.html";
+                    }
+
+                }, function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal mengambil lokasi',
+                        text: error.message,
+                    });
                 });
             } else {
                 Swal.fire({
@@ -158,19 +189,6 @@
                 });
             }
         }
-
-        function redirectToDoGet() {
-          google.script.run
-            .withSuccessHandler(function(response) {
-              // Tindakan setelah sukses, seperti memperbarui UI atau melakukan redirect
-              window.location.href = response; // Misalnya, URL yang dikembalikan oleh doGet
-            })
-            .withFailureHandler(function(error) {
-              alert("Terjadi kesalahan: " + error.message);
-            })
-            .doGet(); // Memanggil doGet() yang didefinisikan di Google Apps Script
-        }
-
 
         // Fungsi untuk menampilkan menu Sertifikat dan menyembunyikan menu Aplikasi
         function showSertifikatMenu() {
@@ -187,7 +205,7 @@
             canAccessAbsensi = true;
             window.location.href = "absensi.html"; // Arahkan ke absensi.html
         }
-  </script>
+    </script>
 </body>
 
 </html>

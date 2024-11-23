@@ -38,41 +38,11 @@
 </head>
 
 <body class="bg-slate-100">
-    <!-- Container untuk membuat iframe responsif -->
-    <iframe id="gform" src="https://script.google.com/macros/s/AKfycbw6gmFotQ1FBkgfvhADsn0aUpSdWU9xLwzS4qobxzoMsGu3o6tNeqOMgetOGi6mSIk01w/exec" style="width: 100%; border: none;"></iframe>
-<!--   <script>
-        // Cek apakah locationVerified true
-        if (sessionStorage.getItem("locationVerified") !== "true") {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Akses Ditolak',
-                text: 'Anda harus berada dalam area yang ditentukan untuk mengakses halaman ini.',
-                confirmButtonText: 'Kembali'
-            }).then(() => {
-                window.location.href = "home.html";
-            });
-        } else {
-            // Mengatur src iframe setelah halaman dimuat
-            var iframe = document.getElementById('gform');
-            iframe.src = "https://script.google.com/macros/s/AKfycbxiPd62VdgGCiazO_SaxnxcbIV9PZHE_wIzBw9wj8ZI0vHIm0mdMT63vKNBQe1lPOximQ/exec";
-            
-            // Deteksi jika iframe gagal dimuat
-            iframe.onload = function() {
-                console.log('Iframe berhasil dimuat');
-            };
-
-            // Fungsi untuk menangani error jika iframe gagal dimuat
-            function handleError() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Not Found',
-                    text: 'Halaman tidak dapat dimuat. Coba lagi nanti.',
-                    confirmButtonText: 'Tutup'
-                });
-            }
-        }
-    </script> -->
+    <!-- Menggunakan <embed> untuk menampilkan Google Form -->
+    <embed id="gform" 
+           src="https://script.google.com/macros/s/AKfycbw6gmFotQ1FBkgfvhADsn0aUpSdWU9xLwzS4qobxzoMsGu3o6tNeqOMgetOGi6mSIk01w/exec" 
+           type="text/html" 
+           style="width: 100%; height: 100%; border: none;">
 </body>
-
 
 </html>
